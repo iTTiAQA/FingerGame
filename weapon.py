@@ -7,7 +7,7 @@ class Weapon:
             player2.shield -= hurt
         else:
             player2.HP -= hurt-player2.shield
-            player2.shied = 0
+            player2.shield = 0
 
     def shield(self):
         pass
@@ -51,9 +51,9 @@ class Weapon:
             player1.right = temp2
 
         if hand2 == "left":
-            player2.left = 0
+            player2.left = 1
         else:
-            player2.right = 0
+            player2.right = 1
 
     def hammer(self, player1, player2, hand):
         if hand == "left":

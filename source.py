@@ -8,9 +8,9 @@ def count_five(num1, num2):
         return 0
 
 
-def detect_shield(or_left, or_right, player):
+def detect_shield(pre_left, pre_right, player):
     """Used for counting shield after a step"""
-    gen_shield = count_five(player.left, player.right) - count_five(or_left, or_right)
+    gen_shield = count_five(player.left, player.right) - count_five(pre_left, pre_right)
     if gen_shield > 0:
         player.shield += 5 * gen_shield
     else:
