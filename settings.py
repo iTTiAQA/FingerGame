@@ -1,4 +1,3 @@
-
 class Setting:
     def __init__(self):
         self.initHP = 10

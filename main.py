@@ -27,6 +27,14 @@ class FingerGame:
         print(f"Shield:{self.player2.shield}    HP:{self.player2.HP}    "
               f"Left:{self.player2.left}    Right:{self.player2.right}")
 
+    def super_input(self, choice, string):
+        """To simplify the input code"""
+        while True:
+            self.display()
+            _input = input(string)
+            if _input in choice:
+                return _input
+
     def detect_shield(self, or_left, or_right, player):
         """Used for counting shield after a step"""
         gen_shield = count_five(player.left, player.right) - count_five(or_left, or_right)
@@ -44,6 +52,7 @@ class FingerGame:
             return True
 
     def _add(self, player1, hand1, player2=None, hand2=None):
+        # if add to another player
         if player2:
             if hand1 == "left":
                 if hand2 == "left":
@@ -72,40 +81,23 @@ class FingerGame:
         or_right = self.player1.right
 
         # Choose hand
-        while True:
-            self.display()
-            hand = input("Player1 action hand:")
-            if hand == "left" or hand == "right":
-                break
-
+        hand = self.super_input(["left", "right"], "Player1 action hand:")
         # Choose action
-        while True:
-            self.display()
-            action = input(f"Use {hand} to:")
-            if action == "act" or action == "add":
-                break
+        action = self.super_input(["act", "add"], f"Use {hand} to:")
 
         # if action == "add"
         if action == "add":
-
             # Choose who to add
-            while True:
-                self.display()
-                if_self = input("If add to yourself:")
-                if if_self == "yes" or if_self == "no":
-                    break
+            if_self = self.super_input(["yes", "no"], "If add to yourself:")
+
             if if_self == "yes":
                 self._add(self.player1, hand)
-
             else:
                 # Choose which hand to add
-                while True:
-                    self.display()
-                    hand2 = input(f"Add {hand} with player2's:")
-                    if hand2 == "left" or hand2 == "right":
-                        break
+                hand2 = self.super_input(["left", "right"], f"Add {hand} with player2's:")
                 self._add(self.player1, hand, self.player2, hand2)
 
+            # detect shield
             self.detect_shield(or_left, or_right, self.player1)
             return "normal"
 
@@ -120,41 +112,23 @@ class FingerGame:
         or_right = self.player2.right
 
         # Choose hand
-        while True:
-            self.display()
-            hand = input("Player2 action hand:")
-            if hand == "left" or hand == "right":
-                break
-
+        hand = self.super_input(["left", "right"], "Player2 action hand:")
         # Choose action
-        while True:
-            self.display()
-            action = input(f"Use {hand} to:")
-            if action == "act" or action == "add":
-                break
+        action = self.super_input(["act", "add"], f"Use {hand} to:")
 
         # if action == "add"
         if action == "add":
-
             # Choose who to add
-            while True:
-                self.display()
-                if_self = input("If add to yourself:")
-                if if_self == "yes" or if_self == "no":
-                    break
+            if_self = self.super_input(["yes", "no"], "If add to yourself:")
+
             if if_self == "yes":
                 self._add(self.player2, hand)
-
             else:
                 # Choose which hand to add
-                while True:
-                    self.display()
-                    hand2 = input(f"Add {hand} with player1's:")
-                    if hand2 == "left" or hand2 == "right":
-                        break
-
+                hand2 = self.super_input(["left", "right"], f"Add {hand} with player1's:")
                 self._add(self.player2, hand, self.player1, hand2)
 
+            # detect shield
             self.detect_shield(or_left, or_right, self.player2)
             return "normal"
 
