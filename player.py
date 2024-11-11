@@ -32,7 +32,7 @@ class Player:
 
         elif using_hand == 9:
             while True:
-                print(f"Player2 Left{player2.left}    Player2 Right{player2.right}")
+                print(f"Player2 Left:{player2.left}    Player2 Right:{player2.right}")
                 hand2 = input("Hook hand:")
                 if hand2 == "left" or hand2 == "right":
                     break

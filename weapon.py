@@ -40,10 +40,6 @@ class Weapon:
             player1.right = 1
 
     def hook(self, player1, player2, hand1, hand2):
-        if hand1 == "left":
-            temp1 = player1.left
-        else:
-            temp1 = player1.right
 
         if hand2 == "left":
             temp2 = player2.left
@@ -56,9 +52,9 @@ class Weapon:
             player1.right = temp2
 
         if hand2 == "left":
-            player2.left = temp1
+            player2.left = 0
         else:
-            player2.right = temp1
+            player2.right = 0
 
     def hammer(self, player1, player2, hand):
         if hand == "left":

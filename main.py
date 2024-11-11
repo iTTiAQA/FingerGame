@@ -2,6 +2,7 @@ from player import Player
 
 
 def count_five(num1, num2):
+    """Used for counting shield in fun: detect_shield()"""
     if num1 == 5 and num2 == 5:
         return 2
     elif num1 == 5 or num2 == 5:
@@ -18,6 +19,7 @@ class FingerGame:
         self.player2 = Player()
 
     def display(self):
+        print("\n")
         print("Player1:")
         print(f"Shield:{self.player1.shield}    HP:{self.player1.HP}    "
               f"Left:{self.player1.left}    Right:{self.player1.right}")
@@ -26,6 +28,7 @@ class FingerGame:
               f"Left:{self.player2.left}    Right:{self.player2.right}")
 
     def detect_shield(self, or_left, or_right, player):
+        """Used for counting shield after a step"""
         gen_shield = count_five(player.left, player.right) - count_five(or_left, or_right)
         if gen_shield > 0:
             player.shield += 5*gen_shield
@@ -47,11 +50,14 @@ class FingerGame:
                     player1.left += player2.left
                 else:
                     player1.left += player2.right
-                if hand2 == "right":
-                    if hand2 == "left":
-                        player1.right += player2.left
-                    else:
-                        player1.right += player2.right
+            # if hand1 == "right":
+            else:
+                if hand2 == "left":
+                    player1.right += player2.left
+                else:
+                    player1.right += player2.right
+
+        # if add to self
         else:
             if hand1 == "left":
                 player1.left += player1.right
@@ -95,11 +101,10 @@ class FingerGame:
                 # Choose which hand to add
                 while True:
                     self.display()
-                    hand2 = input(f"Add {hand} with player2%'s:")
+                    hand2 = input(f"Add {hand} with player2's:")
                     if hand2 == "left" or hand2 == "right":
                         break
-                if hand2 == "left":
-                    self._add(self.player1, hand, self.player2, hand2)
+                self._add(self.player1, hand, self.player2, hand2)
 
             self.detect_shield(or_left, or_right, self.player1)
             return "normal"
@@ -144,11 +149,11 @@ class FingerGame:
                 # Choose which hand to add
                 while True:
                     self.display()
-                    hand2 = input(f"Add {hand} with player2%'s:")
+                    hand2 = input(f"Add {hand} with player1's:")
                     if hand2 == "left" or hand2 == "right":
                         break
-                if hand2 == "left":
-                    self._add(self.player2, hand, self.player1, hand2)
+
+                self._add(self.player2, hand, self.player1, hand2)
 
             self.detect_shield(or_left, or_right, self.player2)
             return "normal"
