@@ -17,7 +17,7 @@ class Player:
         else:
             using_hand = self.right
 
-        if 6 >= using_hand > 0:
+        if 6 > using_hand > 0:
             return "error"
 
         elif using_hand == 6:
