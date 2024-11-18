@@ -11,7 +11,7 @@ class Player:
         self.HP = self.settings.initHP
         self.left = 1
         self.right = 1
-        self.shield = self.settings.init_shield
+        self.shield = 0
         self.weapon = Weapon()
         self.num = num
         self.get_op_num()
@@ -64,7 +64,7 @@ class Player:
 
         return "normal"
 
-    def take_step(self, player2):
+    def take_step(self, player2, take_action=None):
         pre_left = self.left
         pre_right = self.right
 

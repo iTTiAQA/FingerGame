@@ -45,3 +45,13 @@ def finger_add(player1, hand1, player2=None, hand2=None):
     # Make a reasonable range
     player1.left %= 10
     player1.right %= 10
+
+
+def super_input(choice, string, print_string=None):
+    """To simplify the input code"""
+    while True:
+        if print_string:
+            print(print_string)
+        _input = input(string)
+        if _input in choice:
+            return _input
