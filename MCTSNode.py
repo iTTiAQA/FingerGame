@@ -6,10 +6,6 @@ from fingergame import FingerGame
 from settings import Setting
 
 
-"""Basic adding movements: ["add", "yes/no", "left/right"]"""
-"""Basic acting movements: ["act", "left/right", "left/right"]"""
-
-
 class MCTSNode:
     def __init__(self, state: FingerGame, parent=None, move=None, self_id=None):
         self.setting = Setting()
@@ -24,30 +20,6 @@ class MCTSNode:
 
     def get_id(self):
         return self.player
-
-    """
-    def get_possible_moves(self):
-        my_id = self.get_id()
-        if my_id.left > 5 or my_id.right > 5:
-            if my_id.left == 9 or my_id.right == 9:
-                # able to use hook
-                return [["left", "add", "yes"], ["right", "add", "yes"],
-                        ["left", "add", "no", "left"], ["right", "add", "no", "left"],
-                        ["left", "add", "no", "right"], ["right", "add", "no", "right"],
-                        ["left", "act", "left"], ["left", "act", "right"],
-                        ["right", "act", "left"], ["right", "act", "right"]]
-            else:
-                # able to use others
-                return [["left", "add", "yes"], ["right", "add", "yes"],
-                        ["left", "add", "no", "left"], ["right", "add", "no", "left"],
-                        ["left", "add", "no", "right"], ["right", "add", "no", "right"],
-                        ["act", "left"], ["act", "right"]]
-        else:
-            # only able to add
-            return [["left", "add", "yes"], ["right", "add", "yes"],
-                    ["left", "add", "no", "left"], ["right", "add", "no", "left"],
-                    ["left", "add", "no", "right"], ["right", "add", "no", "right"]]
-    """
 
     def get_possible_moves(self):
         my_id = self.get_id()
@@ -90,7 +62,6 @@ class MCTSNode:
         return max(self.children.values(), key=lambda c: c.wins / c.visits + exploration_weight * math.sqrt(
             (2 * math.log(self.visits) / c.visits)))
 
-    # @aisrc.print_round
     def expand(self):
         if self.is_fully_expanded():
             return None
@@ -117,14 +88,12 @@ class MCTSNode:
                 move = random.choice(self.get_possible_moves())
             else:
                 # Assuming perfect opponent for player2
-                # best_score = float('-inf')
                 best_move = None
                 for move in self.get_possible_moves():
                     next_state = aisrc.copy_state(self.state)
                     next_state.waiting_player.take_step(next_state.current_player, move)
                     winner = next_state.is_dead()
                     if winner == self.player:
-                        # best_score = float('inf')
                         best_move = move
                         break
                     # elif score == self.player:

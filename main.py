@@ -7,32 +7,12 @@ class FingerGame2(FingerGame):
     def __init__(self, if_ai1=0, if_ai2=0):
         super().__init__(if_ai1, if_ai2)
 
-    """
-    def a_move(self, player1, player2, self_ai=None):
-        while True:
-            self.display()
-            print("1's round")
-            result = player1.take_step(player2, self_ai.run().move)
-            if result == "pause" or result == "error":
-                continue
-            else:
-                break
-        if self.is_dead():
-            self.display()
-            print("2 lose")
-            return True
-        return False
-        """
-
     def run_game(self):
         while True:
             # Player1's round
             self.current_player = self.player1      # For indication
             self.waiting_player = self.player2
-            """
-            if self.a_move(self.player1, self.player2, ai1):
-                break
-            """
+
             while True:
                 self.display()
                 if self.if_ai[0]:
@@ -58,10 +38,7 @@ class FingerGame2(FingerGame):
             # Player2's round
             self.current_player = self.player2      # For indication
             self.waiting_player = self.player1
-            """
-            if self.a_move(self.player2, self.player1, ai2):
-                break
-            """
+
             while True:
                 self.display()
                 if self.if_ai[1]:
