@@ -2,7 +2,8 @@ from fingergame import FingerGame
 
 
 def set_state(state_list: list):
-    state = FingerGame(state_list[9][0], state_list[9][1])
+    # state = FingerGame(state_list[9][0], state_list[9][1])
+    state = FingerGame(if_ai1=1, if_ai2=1)
     state.player1.HP = state_list[0]
     state.player1.shield = state_list[1]
     state.player1.left = state_list[2]
@@ -35,29 +36,3 @@ def get_state(state: FingerGame):
 
 def copy_state(state: FingerGame):
     return set_state(get_state(state))
-
-
-def copy_list(inlist: list):
-    olist = []
-    for ele in inlist:
-        olist.append(ele)
-        return olist
-
-
-def create_reverse_dict(dictionary: dict):
-    reverse_dict = {}
-    for key, val in dictionary.items():
-        if val not in reverse_dict:
-            reverse_dict[val] = [key]
-        else:
-            reverse_dict[val].append(key)
-    return reverse_dict
-
-
-def print_round(fun):
-    def wrapper(self, *args, **kwargs):
-        print(get_state(self.state))
-        result = fun(self, *args, **kwargs)
-        return result
-    return wrapper
-
