@@ -1,13 +1,15 @@
 from MCTSNode import MCTSNode
 from fingergame import FingerGame
+from settings import Setting
+from aisrc import sigmoid
 
 
 class MCTS:
     def __init__(self, state: FingerGame, input_id: int, iterations=1000):
+        self.setting = Setting()
         self.root = MCTSNode(state, self_id=input_id)
         self.iterations = iterations
         self.using_id = input_id
-        # self.hash_list = {}
 
     def run(self):
         for _ in range(self.iterations):
@@ -16,28 +18,26 @@ class MCTS:
 
             # Selection
             while not state.is_dead() and not node.is_fully_expanded():
-                # node = node.best_child()
                 node = node.expand()
                 state = node.state
 
             # Expansion
             if not state.is_dead() and node.is_fully_expanded():
-                # node = node.expand()
                 node = node.best_child()
-                # state = node.state
 
             # Simulation
-            winner = node.simulate()
+            simu_time, winner = node.simulate()
 
             # Backpropagation
             while node is not None:
                 node.visits += 1
-                # node.wins += result if node.state.current_player == node.state.player2 else -result
-                # node.wins += 1 if winner == self.using_id else -1
                 if type(winner) == str:
-                    node.wins += 1 if int(winner) == self.using_id else -1
+                    winning_decay = sigmoid(0.5 * self.setting.simulate_depth - simu_time)
+                    losing_decay = sigmoid(0.5 * self.setting.simulate_depth - simu_time + 2)
+                    node.wins += winning_decay*self.setting.win_award if int(winner) == self.using_id \
+                        else -losing_decay*self.setting.loss_punish
                 else:
                     node.wins += winner
                 node = node.parent
 
-        return self.root.best_child()
+        return self.root.best_child(exploration_weight=0)
