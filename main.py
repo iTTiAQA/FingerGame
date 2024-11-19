@@ -1,42 +1,24 @@
 from MCTS import MCTS
 from fingergame import FingerGame
 from source import super_input
+from aisrc import copy_state
 
 
 class FingerGame2(FingerGame):
     def __init__(self, if_ai1=0, if_ai2=0):
         super().__init__(if_ai1, if_ai2)
 
-    """
-    def a_move(self, player1, player2, self_ai=None):
-        while True:
-            self.display()
-            print("1's round")
-            result = player1.take_step(player2, self_ai.run().move)
-            if result == "pause" or result == "error":
-                continue
-            else:
-                break
-        if self.is_dead():
-            self.display()
-            print("2 lose")
-            return True
-        return False
-        """
-
     def run_game(self):
         while True:
             # Player1's round
             self.current_player = self.player1      # For indication
             self.waiting_player = self.player2
-            """
-            if self.a_move(self.player1, self.player2, ai1):
-                break
-            """
+
             while True:
                 self.display()
                 if self.if_ai[0]:
-                    ai1 = MCTS(self, 1, self.setting.iterations)
+                    state = copy_state(self)
+                    ai1 = MCTS(state, 1, self.setting.iterations)
                     print("1's round")
                     move = ai1.run().move
                     result = self.player1.take_step(self.player2, move)
@@ -58,14 +40,12 @@ class FingerGame2(FingerGame):
             # Player2's round
             self.current_player = self.player2      # For indication
             self.waiting_player = self.player1
-            """
-            if self.a_move(self.player2, self.player1, ai2):
-                break
-            """
+
             while True:
                 self.display()
                 if self.if_ai[1]:
-                    ai2 = MCTS(self, 2, self.setting.iterations)
+                    state = copy_state(self)
+                    ai2 = MCTS(state, 2, self.setting.iterations)
                     print("2's round")
                     move = ai2.run().move
                     result = self.player2.take_step(self.player1, move)
