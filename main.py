@@ -3,6 +3,8 @@ from fingergame import FingerGame
 from source import super_input
 from aisrc import copy_state
 
+
+
 class FingerGame2(FingerGame):
     def __init__(self, if_ai1=0, if_ai2=0):
         super().__init__(if_ai1, if_ai2)
@@ -16,7 +18,10 @@ class FingerGame2(FingerGame):
             while True:
                 self.display()
                 if self.if_ai[0]:
-                    ai1 = MCTS(copy_state(self), 1, self.setting.iterations)
+
+                    state = copy_state(self)
+                    ai1 = MCTS(state, 1, self.setting.iterations)
+
                     print("1's round")
                     move = ai1.run().move
                     result = self.player1.take_step(self.player2, move)
@@ -42,7 +47,10 @@ class FingerGame2(FingerGame):
             while True:
                 self.display()
                 if self.if_ai[1]:
-                    ai2 = MCTS(copy_state(self), 2, self.setting.iterations)
+
+                    state = copy_state(self)
+                    ai2 = MCTS(state, 2, self.setting.iterations)
+
                     print("2's round")
                     move = ai2.run().move
                     result = self.player2.take_step(self.player1, move)

@@ -31,7 +31,7 @@ class MCTS:
             while node is not None:
                 node.visits += 1
                 if type(winner) == str:
-                    node.wins += self.setting.win_award if int(winner) == self.using_id else -self.setting.win_award
+                    node.wins += self.setting.win_award if int(winner) == self.using_id else -self.setting.loss_punish
                 else:
                     node.wins += winner
                 node = node.parent

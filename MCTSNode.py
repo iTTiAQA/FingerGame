@@ -1,5 +1,4 @@
 import math
-import time
 import random
 import aisrc
 from fingergame import FingerGame
@@ -57,7 +56,9 @@ class MCTSNode:
 
     def best_child(self, exploration_weight="none"):
         if type(exploration_weight) == str:
-            exploration_weight = self.setting.exploration_weight
+
+            exploration_weight = random.randint((1-self.setting.exp_w_distribution)*self.setting.exploration_weight,
+                                                (1+self.setting.exp_w_distribution)*self.setting.exploration_weight)
         return max(self.children.values(), key=lambda c: c.wins / c.visits + exploration_weight * math.sqrt(
             (2 * math.log(self.visits) / c.visits)))
 
@@ -74,18 +75,18 @@ class MCTSNode:
         return child
 
     def simulate(self):
-        start_time = time.perf_counter()
         state = self.state
         best_score = 0
         worst_score = 0
+        simu_time = 0
         while not self.state.is_dead():
-            current_time = time.perf_counter()
-            if current_time - start_time > self.setting.cut_time:
+            simu_time += 1
+            if simu_time > self.setting.simulate_depth:
                 break
 
 
             if state.current_player == self.player:
-                move = random.choice(self.get_possible_moves())
+                # move = random.choice(self.get_possible_moves())
                 best_move = None
                 for move in self.get_possible_moves():
                     next_state = aisrc.copy_state(self.state)
@@ -100,7 +101,9 @@ class MCTSNode:
                         worst_score = min(self.player2.HP-self.player.HP, worst_score)
                         best_move = move
 
-                move = best_move if best_move else random.choice(self.get_possible_moves())
+
+                move = best_move if best_move else self.best_child().move
+                # random.choice(self.get_possible_moves())
 
             else:
                 # Assuming perfect opponent for player2
@@ -114,8 +117,9 @@ class MCTSNode:
                         break
                     # elif winner == self.player2:
                     else:
-                        best_score = max(self.player2.HP-self.player.HP, best_score)
-                        worst_score = min(self.player.HP-self.player2.HP, worst_score)
+                        best_score = min(self.player.HP - self.player2.HP, worst_score)
+                        worst_score = max(self.player2.HP-self.player.HP, best_score)
+
                         best_move = move
                 move = best_move
 
@@ -125,4 +129,4 @@ class MCTSNode:
         if winner:
             return "1" if winner == self.state.player1 else "2"
         else:
-            return self.setting.best_award * best_score - self.setting.worst_punish * worst_score
+            return +self.setting.best_award * best_score - self.setting.worst_punish * worst_score
