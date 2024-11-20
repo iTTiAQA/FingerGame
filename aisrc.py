@@ -36,7 +36,6 @@ def get_state(state: FingerGame):
 
     return state_list
 
-
 def copy_state(state: FingerGame, if_not_2ai=False):
     return set_state(get_state(state), if_not_2ai)
 

@@ -4,6 +4,7 @@ from settings import Setting
 from aisrc import sigmoid
 
 
+
 class MCTS:
     def __init__(self, state: FingerGame, input_id: int, iterations=1000):
         self.setting = Setting()
@@ -32,10 +33,12 @@ class MCTS:
             while node is not None:
                 node.visits += 1
                 if type(winner) == str:
+
                     winning_decay = sigmoid(0.5 * self.setting.simulate_depth - simu_time)
                     losing_decay = sigmoid(0.5 * self.setting.simulate_depth - simu_time + 2)
                     node.wins += winning_decay*self.setting.win_award if int(winner) == self.using_id \
                         else -losing_decay*self.setting.loss_punish
+
                 else:
                     node.wins += winner
                 node = node.parent

@@ -51,6 +51,7 @@ class MCTSNode:
 
         return left_possible_move + right_possible_move
 
+
     def is_fully_expanded(self):
         return len(self.children) == len(self.get_possible_moves())
 
@@ -59,6 +60,7 @@ class MCTSNode:
             exploration_weight = \
                 random.randint(int((1 - self.setting.exp_w_distribution) * self.setting.exploration_weight),
                                int((1 + self.setting.exp_w_distribution) * self.setting.exploration_weight + 1))
+
         return max(self.children.values(), key=lambda c: c.wins / c.visits + exploration_weight * math.sqrt(
             (2 * math.log(self.visits) / c.visits)))
 
@@ -105,6 +107,27 @@ class MCTSNode:
 
             else:
                 # Assuming perfect opponent for player2
+
+                best_move = None
+                for move in self.get_possible_moves(change_player=True):
+                    next_state = aisrc.copy_state(self.state)
+                    next_state.current_player.take_step(next_state.waiting_player, move)
+                    winner = next_state.is_dead()
+                    if winner == self.player2:
+                        best_move = move
+                        break
+                    # elif winner == self.player2:
+                    else:
+                        best_score = max(self.player.HP - self.player2.HP, best_score)
+                        worst_score = min(self.player2.HP - self.player.HP, worst_score)
+                        best_move = move
+
+
+                move = best_move if best_move else self.best_child().move
+                # random.choice(self.get_possible_moves())
+
+            else:
+                # Assuming perfect opponent for player2
                 best_move = None
                 for move in self.get_possible_moves(change_player=True):
                     next_state = aisrc.copy_state(self.state)
@@ -115,8 +138,9 @@ class MCTSNode:
                         break
                     # elif winner == self.player2:
                     else:
-                        best_score = max(self.player.HP - self.player2.HP, best_score)
-                        worst_score = min(self.player2.HP - self.player.HP, worst_score)
+                        best_score = min(self.player.HP - self.player2.HP, worst_score)
+                        worst_score = max(self.player2.HP-self.player.HP, best_score)
+
                         best_move = move
                 move = best_move
 
