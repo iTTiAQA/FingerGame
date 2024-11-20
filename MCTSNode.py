@@ -83,8 +83,9 @@ class MCTSNode:
             if current_time - start_time > self.setting.cut_time:
                 break
 
+
             if state.current_player == self.player:
-                # move = random.choice(self.get_possible_moves())
+                move = random.choice(self.get_possible_moves())
                 best_move = None
                 for move in self.get_possible_moves():
                     next_state = aisrc.copy_state(self.state)
