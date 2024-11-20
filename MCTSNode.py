@@ -56,6 +56,7 @@ class MCTSNode:
 
     def best_child(self, exploration_weight="none"):
         if type(exploration_weight) == str:
+
             exploration_weight = random.randint((1-self.setting.exp_w_distribution)*self.setting.exploration_weight,
                                                 (1+self.setting.exp_w_distribution)*self.setting.exploration_weight)
         return max(self.children.values(), key=lambda c: c.wins / c.visits + exploration_weight * math.sqrt(
@@ -83,6 +84,7 @@ class MCTSNode:
             if simu_time > self.setting.simulate_depth:
                 break
 
+
             if state.current_player == self.player:
                 # move = random.choice(self.get_possible_moves())
                 best_move = None
@@ -98,6 +100,7 @@ class MCTSNode:
                         best_score = max(self.player.HP-self.player2.HP, best_score)
                         worst_score = min(self.player2.HP-self.player.HP, worst_score)
                         best_move = move
+
 
                 move = best_move if best_move else self.best_child().move
                 # random.choice(self.get_possible_moves())
@@ -116,6 +119,7 @@ class MCTSNode:
                     else:
                         best_score = min(self.player.HP - self.player2.HP, worst_score)
                         worst_score = max(self.player2.HP-self.player.HP, best_score)
+
                         best_move = move
                 move = best_move
 

@@ -23,3 +23,4 @@ class Setting:
 
         self.win_award = 6
         self.loss_punish = 4
+
