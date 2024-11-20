@@ -12,7 +12,7 @@ class MCTSNode:
         self.parent = parent
         self.move = move
         self.children = {}
-        self.visits = 0
+        self.visits = 0.1
         self.wins = 0
         self.player = self.state.player1 if self_id == 1 else self.state.player2
         self.player2 = self.state.player2 if self_id == 1 else self.state.player1
