@@ -26,7 +26,7 @@ class MCTSNode:
         if my_id.left > 5 or my_id.left == 0:
             if my_id.left == 9:
                 left_possible_move = \
-                    [["left", "add", "yes"],  ["left", "add", "no", "left"], ["left", "add", "no", "right"],
+                    [["left", "add", "yes"], ["left", "add", "no", "left"], ["left", "add", "no", "right"],
                      ["left", "act", "left"], ["left", "act", "right"]]
             else:
                 left_possible_move = \
@@ -39,7 +39,7 @@ class MCTSNode:
         if my_id.right > 5 or my_id.right == 0:
             if my_id.right == 9:
                 right_possible_move = \
-                    [["right", "add", "yes"],  ["right", "add", "no", "left"], ["right", "add", "no", "right"],
+                    [["right", "add", "yes"], ["right", "add", "no", "left"], ["right", "add", "no", "right"],
                      ["right", "act", "left"], ["right", "act", "right"]]
             else:
                 right_possible_move = \
@@ -49,16 +49,18 @@ class MCTSNode:
             right_possible_move = \
                 [["right", "add", "yes"], ["right", "add", "no", "left"], ["right", "add", "no", "right"]]
 
-        return left_possible_move+right_possible_move
+        return left_possible_move + right_possible_move
+
 
     def is_fully_expanded(self):
         return len(self.children) == len(self.get_possible_moves())
 
     def best_child(self, exploration_weight="none"):
         if type(exploration_weight) == str:
+            exploration_weight = \
+                random.randint(int((1 - self.setting.exp_w_distribution) * self.setting.exploration_weight),
+                               int((1 + self.setting.exp_w_distribution) * self.setting.exploration_weight + 1))
 
-            exploration_weight = random.randint((1-self.setting.exp_w_distribution)*self.setting.exploration_weight,
-                                                (1+self.setting.exp_w_distribution)*self.setting.exploration_weight)
         return max(self.children.values(), key=lambda c: c.wins / c.visits + exploration_weight * math.sqrt(
             (2 * math.log(self.visits) / c.visits)))
 
@@ -84,7 +86,6 @@ class MCTSNode:
             if simu_time > self.setting.simulate_depth:
                 break
 
-
             if state.current_player == self.player:
                 # move = random.choice(self.get_possible_moves())
                 best_move = None
@@ -97,8 +98,28 @@ class MCTSNode:
                         break
                     # elif winner == self.player2:
                     else:
-                        best_score = max(self.player.HP-self.player2.HP, best_score)
-                        worst_score = min(self.player2.HP-self.player.HP, worst_score)
+                        best_score = max(self.player.HP - self.player2.HP, best_score)
+                        worst_score = min(self.player2.HP - self.player.HP, worst_score)
+                        best_move = move
+
+                move = best_move if best_move else self.best_child().move
+                # random.choice(self.get_possible_moves())
+
+            else:
+                # Assuming perfect opponent for player2
+
+                best_move = None
+                for move in self.get_possible_moves(change_player=True):
+                    next_state = aisrc.copy_state(self.state)
+                    next_state.current_player.take_step(next_state.waiting_player, move)
+                    winner = next_state.is_dead()
+                    if winner == self.player2:
+                        best_move = move
+                        break
+                    # elif winner == self.player2:
+                    else:
+                        best_score = max(self.player.HP - self.player2.HP, best_score)
+                        worst_score = min(self.player2.HP - self.player.HP, worst_score)
                         best_move = move
 
 
@@ -127,6 +148,6 @@ class MCTSNode:
 
         winner = state.is_dead()
         if winner:
-            return "1" if winner == self.state.player1 else "2"
+            return (simu_time, "1") if winner == self.state.player1 else (simu_time, "2")
         else:
-            return +self.setting.best_award * best_score - self.setting.worst_punish * worst_score
+            return simu_time, self.setting.best_award * best_score - self.setting.worst_punish * worst_score

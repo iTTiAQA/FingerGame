@@ -12,15 +12,14 @@ class Setting:
         self.no = "no"
 
         # MCTS settings:
-        self.iterations = 4000      # Breadth correlate
+        self.iterations = 5000      # Breadth correlate
         self.simulate_depth = 8       # Depth correlate
 
-        self.exploration_weight = 20
+        self.exploration_weight = 45
         self.exp_w_distribution = 0.2
 
-        self.worst_punish = 0.00
-        self.best_award = 0.05
+        self.worst_punish = 0.10
+        self.best_award = 0.25
 
-        self.win_award = 6
-        self.loss_punish = 4
-
+        self.win_award = 7
+        self.loss_punish = 5
