@@ -19,7 +19,6 @@ class FingerGame2(FingerGame):
                 if self.if_ai[0]:
                     state = copy_state(self)
                     ai1 = MCTS(state, 1, self.setting.iterations)
-
                     print("1's round")
                     move = ai1.run().move
                     result = self.player1.take_step(self.player2, move)
@@ -45,10 +44,8 @@ class FingerGame2(FingerGame):
             while True:
                 self.display()
                 if self.if_ai[1]:
-
                     state = copy_state(self)
                     ai2 = MCTS(state, 2, self.setting.iterations)
-
                     print("2's round")
                     move = ai2.run().move
                     result = self.player2.take_step(self.player1, move)

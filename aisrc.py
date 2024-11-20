@@ -36,9 +36,18 @@ def get_state(state: FingerGame):
 
     return state_list
 
+
 def copy_state(state: FingerGame, if_not_2ai=False):
     return set_state(get_state(state), if_not_2ai)
 
 
 def sigmoid(x: float):
     return 1/(1+math.exp(-x))
+
+
+def score(node, simu_time, best_score, worst_score):
+    best_decay = sigmoid(0.5 * node.setting.simulate_depth - simu_time - 1)
+    worst_decay = sigmoid(0.5 * node.setting.simulate_depth - simu_time + 2)
+    best_score = max(best_decay * (node.setting.initHP / 2 * (node.player2.HP + 1)), best_score)
+    worst_score = max(worst_decay * (node.setting.initHP / 2 * (node.player.HP + 1)), worst_score)
+    return best_score, worst_score
