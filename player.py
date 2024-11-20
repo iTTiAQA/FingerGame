@@ -52,8 +52,9 @@ class Player:
             self.weapon.gun(self, player2, hand)
 
         elif using_hand == 9:
-            hand2 = self.super_input(["left", "right"], "Hook hand:",
+            hand2 = self.super_input([self.settings.left_hand, self.settings.right_hand], "Hook hand:",
                                      f"Player2 Left:{player2.left}    Player2 Right:{player2.right}")
+            hand2 = "left" if hand2 == self.settings.left_hand else "right"
             self.weapon.hook(self, player2, hand, hand2)
 
         elif using_hand == 0:
@@ -69,20 +70,25 @@ class Player:
         pre_right = self.right
 
         # Choose hand
-        hand = self.super_input(["left", "right"], f"Player{self.num} action hand:")
+        hand = self.super_input([self.settings.left_hand, self.settings.right_hand], f"Player{self.num} action hand:")
+        hand = "left" if hand == self.settings.left_hand else "right"
         # Choose action
-        action = self.super_input(["act", "add"], f"Use {hand} to:")
+        action = self.super_input([self.settings.act, self.settings.add], f"Use {hand} to:")
+        action = "act" if action == self.settings.act else "add"
 
         # if action == "add"
         if action == "add":
             # Choose who to add
-            if_self = self.super_input(["yes", "no"], "If add to yourself:")
+            if_self = self.super_input([self.settings.yes, self.settings.no], "If add to yourself:")
+            if_self = "yes" if if_self == self.settings.yes else "no"
 
             if if_self == "yes":
                 finger_add(self, hand)
             else:
                 # Choose which hand to add
-                hand2 = self.super_input(["left", "right"], f"Add {hand} with player{self.get_op_num()}'s:")
+                hand2 = self.super_input([self.settings.left_hand, self.settings.right_hand],
+                                         f"Add {hand} with player{self.get_op_num()}'s:")
+                hand2 = "left" if hand2 == self.settings.left_hand else "right"
                 finger_add(self, hand, player2, hand2)
 
             # detect shield

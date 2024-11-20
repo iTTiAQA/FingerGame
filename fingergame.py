@@ -16,7 +16,7 @@ class FingerGame:
             self.player2 = AiPlayer(self, 2)
         else:
             self.player2 = Player(self, 2)
-        self.if_ai = [if_ai1, if_ai1]
+        self.if_ai = [if_ai1, if_ai2]
         self.current_player = self.player1
         self.waiting_player = self.player2
 

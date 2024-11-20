@@ -1,9 +1,11 @@
 from MCTSNode import MCTSNode
 from fingergame import FingerGame
+from settings import Setting
 
 
 class MCTS:
     def __init__(self, state: FingerGame, input_id: int, iterations=1000):
+        self.setting = Setting()
         self.root = MCTSNode(state, self_id=input_id)
         self.iterations = iterations
         self.using_id = input_id
@@ -29,9 +31,9 @@ class MCTS:
             while node is not None:
                 node.visits += 1
                 if type(winner) == str:
-                    node.wins += 1 if int(winner) == self.using_id else -1
+                    node.wins += self.setting.win_award if int(winner) == self.using_id else -self.setting.win_award
                 else:
                     node.wins += winner
                 node = node.parent
 
-        return self.root.best_child()
+        return self.root.best_child(exploration_weight=0)

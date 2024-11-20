@@ -42,24 +42,20 @@ class AiPlayer(Player):
         pre_right = self.right
 
         # Choose hand:
-        # hand = self.super_input(["left", "right"], f"Player{self.num} action hand:")
         hand = take_action[0]
 
         # Choose action:
-        # action = self.super_input(["act", "add"], f"Use {hand} to:")
         action = take_action[1]
 
         # if action == "add"
         if action == "add":
             # Choose who to add:
-            # if_self = self.super_input(["yes", "no"], "If add to yourself:")
             if_self = take_action[2]
 
             if if_self == "yes":
                 finger_add(self, hand)
             else:
                 # Choose which hand to add:
-                # hand2 = self.super_input(["left", "right"], f"Add {hand} with player{self.get_op_num()}'s:")
                 hand2 = take_action[3]
                 finger_add(self, hand, player2, hand2)
 
