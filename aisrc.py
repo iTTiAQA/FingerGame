@@ -2,7 +2,8 @@ from fingergame import FingerGame
 
 
 def set_state(state_list: list):
-    state = FingerGame(state_list[9][0], state_list[9][1])
+    # state = FingerGame(state_list[9][0], state_list[9][1])
+    state = FingerGame(if_ai1=1, if_ai2=1)
     state.player1.HP = state_list[0]
     state.player1.shield = state_list[1]
     state.player1.left = state_list[2]
@@ -35,5 +36,3 @@ def get_state(state: FingerGame):
 
 def copy_state(state: FingerGame):
     return set_state(get_state(state))
-
-
