@@ -33,8 +33,8 @@ class MCTS:
                 node.visits += 1
                 if type(winner) == str:
                     if simu_time == 0:
-                        winning_decay = float(1e9)
-                        losing_decay = float(1e9)
+                        winning_decay = float(1e21)
+                        losing_decay = float(1e21)
                     else:
                         winning_decay = sigmoid(0.5 * self.setting.simulate_depth - simu_time)
                         losing_decay = sigmoid(0.5 * self.setting.simulate_depth - simu_time + 2)
