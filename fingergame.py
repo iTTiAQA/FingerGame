@@ -69,8 +69,3 @@ class FingerGame:
                     break
             if self.is_dead():
                 break
-
-
-if __name__ == '__main__':
-    game = FingerGame(if_ai1=0, if_ai2=0)
-    game.run_game()
