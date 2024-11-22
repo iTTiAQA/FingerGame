@@ -1,3 +1,9 @@
+import json
+
+
+settings = json.load(open("settings.json"))
+
+
 def count_five(num1, num2):
     """Used for counting shield in fun: detect_shield()"""
     if num1 == 5 and num2 == 5:
@@ -52,14 +58,22 @@ class Weapon:
         pass
 
     def attack(self, player2, hurt):
+        if hurt == 0:
+            hurt = 10
         if player2.shield > hurt:
             player2.shield -= hurt
         else:
             player2.HP -= hurt - player2.shield
             player2.shield = 0
 
-    def shield(self):
-        pass
+    def bow_attack(self, player2, hurt):
+        if hurt == 0:
+            hurt = 10
+        if player2.shield > hurt / 2:
+            player2.shield -= hurt / 2
+        else:
+            player2.HP -= hurt - player2.shield * 2
+            player2.shield = 0
 
     def bow(self, player1, player2, hand):
         if hand == "left":
@@ -67,7 +81,7 @@ class Weapon:
         else:
             hurt = player1.left * 0.5
 
-        self.attack(player2, hurt)
+        self.bow_attack(player2, hurt)
         player1.left = 1
         player1.right = 1
 
@@ -127,7 +141,7 @@ class Weapon:
 class Player:
     def __init__(self, game, num):
         self.game = game
-        self.HP = 5
+        self.HP = settings["init_HP"]
         self.left = 1
         self.right = 1
         self.shield = 0
@@ -183,7 +197,10 @@ class Player:
     def take_step(self, player2, action):
         """action: all, alr, arl, arr, als, ars, ul, ur, ull, ulr, url, urr"""
         choices = {"all": ["left", "add", "no", "left"], "alr": ["left", "add", "no", "right"], "arl": ["right", "add", "no", "left"], "arr": ["right", "add", "no", "right"], "als": ["left", "add", "yes"], "ars": ["right", "add", "yes"], "ul": ["left", "act"], "ur": ["right", "act"], "ull": ["left", "act", "left"], "ulr": ["left", "act", "right"], "url": ["right", "act", "left"], "urr": ["right", "act", "right"]}
-        take_action = choices[action]
+        try:
+            take_action = choices[action]
+        except KeyError:
+            return "error"
 
         pre_left = self.left
         pre_right = self.right
@@ -251,15 +268,16 @@ class FingerGame:
             self.change_term()
 
     def tick0(self) -> dict:
-        return {"status": "normal", "current_player": self.current_player.num, "waiting_player": self.waiting_player.num, "player1": {"left": self.player1.left, "right": self.player1.right, "HP": self.player1.HP, "shield": self.player1.shield}, "player2": {"left": self.player2.left, "right": self.player2.right, "HP": self.player2.HP, "shield": self.player2.shield}}
+        return {"status": "normal", "current_player": self.current_player.num, "waiting_player": self.waiting_player.num, "player1": {"left": self.player1.left, "right": self.player1.right, "HP": self.player1.HP, "shield": self.player1.shield}, "player2": {"left": self.player2.left, "right": self.player2.right, "HP": self.player2.HP, "shield": self.player2.shield}, "history": {"action": None}}
 
     def tick(self, action) -> dict:
+        old_state = {"current_player": {"num": self.current_player.num, "left": self.player1.left, "right": self.player1.right, "HP": self.player1.HP, "shield": self.player1.shield}, "waiting_player": {"num": self.waiting_player.num, "left": self.player2.left, "right": self.player2.right, "HP": self.player2.HP, "shield": self.player2.shield}}
         result = self.current_player.take_step(self.waiting_player, action)
         if self.is_dead():
             return {"status": "game over", "winner": self.is_dead().num}
         if result != "error":
             self.current_player, self.waiting_player = self.waiting_player, self.current_player
-            return {"status": "normal", "current_player": self.current_player.num, "waiting_player": self.waiting_player.num, "player1": {"left": self.player1.left, "right": self.player1.right, "HP": self.player1.HP, "shield": self.player1.shield}, "player2": {"left": self.player2.left, "right": self.player2.right, "HP": self.player2.HP, "shield": self.player2.shield}}
+            return {"status": "normal", "current_player": {"num": self.current_player.num, "left": self.player1.left, "right": self.player1.right, "HP": self.player1.HP, "shield": self.player1.shield}, "waiting_player": {"num": self.waiting_player.num, "left": self.player2.left, "right": self.player2.right, "HP": self.player2.HP, "shield": self.player2.shield}, "history": {"action": action, "old_state": old_state}}
         else:
             return {"status": "error", "msg": "invalid action"}
 

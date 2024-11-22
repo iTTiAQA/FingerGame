@@ -26,19 +26,38 @@
 ```Python
 {
     "status": "normal",
-    "current_player": self.current_player.num,
-    "waiting_player": self.waiting_player.num,
-    "player1": {
+    "current_player": {
+        "num": self.current_player.num,
         "left": self.player1.left,
         "right": self.player1.right,
         "HP": self.player1.HP,
         "shield": self.player1.shield
     },
-    "player2": {
+    "waiting_player": {
+        "num": self.waiting_player.num,
         "left": self.player2.left,
         "right": self.player2.right,
         "HP": self.player2.HP,
         "shield": self.player2.shield
+    },
+    "history": {
+        "action": action,
+        "old_state": {
+                        "current_player": {
+                            "num": self.current_player.num,
+                            "left": self.player1.left,
+                            "right": self.player1.right,
+                            "HP": self.player1.HP,
+                            "shield": self.player1.shield
+                        },
+                        "waiting_player": {
+                            "num": self.waiting_player.num,
+                            "left": self.player2.left,
+                            "right": self.player2.right,
+                            "HP": self.player2.HP,
+                            "shield": self.player2.shield
+                        }
+                    }
     }
 }
 
